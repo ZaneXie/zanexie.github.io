@@ -15,7 +15,7 @@ Github Pages在github上创建一个新的repository，名字叫us">
 <meta property="og:description" content="Github Pages 提供了免费的静态文件服务，用来搭建简单的个人网站很是方便。下面介绍一下如何使用Github Pages制作个人博客。
 由于Github Pages只能提供静态文件服务，因此不能使用类似wordpress的博客系统。一番搜索之后找到了hexo，一个使用nodejs来生成静态文件的博客系统。
 Github Pages在github上创建一个新的repository，名字叫us">
-<meta property="og:updated_time" content="2017-01-24T09:41:00.361Z">
+<meta property="og:updated_time" content="2017-01-24T09:59:08.940Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Github Pages & hexo 的安装与使用">
 <meta name="twitter:description" content="Github Pages 提供了免费的静态文件服务，用来搭建简单的个人网站很是方便。下面介绍一下如何使用Github Pages制作个人博客。
@@ -191,7 +191,17 @@ Github Pages在github上创建一个新的repository，名字叫us">
 <li>修改md文件后自动刷新浏览器，免去手动刷新网页的烦恼</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install --save hexo-browsersync</div></pre></td></tr></table></figure>
-<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><p>如果重新克隆了源码，记得安装一次依赖，在src目录中执行</p>
+<h5 id="自定义域名"><a href="#自定义域名" class="headerlink" title="自定义域名"></a>自定义域名</h5><p>GitHub Pages支持自定义域名，配置方式：</p>
+<ol>
+<li><p>配置GitHub</p>
+<p> 在网页端打开<a href="https://github.com/username/username.github.io，点击Settings，在下方GitHub" target="_blank" rel="external">https://github.com/username/username.github.io，点击Settings，在下方GitHub</a> Pages栏中设置Custom domain为自己的域名。</p>
+</li>
+<li><p>配置DNS</p>
+<p> 修改DNS记录，将自己域名的CNAME值设为username.github.io</p>
+</li>
+</ol>
+<p>配置好后可使用自己的域名访问GitHub Pages，更多说明见<a href="https://help.github.com/articles/quick-start-setting-up-a-custom-domain/" target="_blank" rel="external">官方文档</a>。</p>
+<h5 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h5><p>如果重新克隆了源码，记得安装一次依赖，在src目录中执行</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install</div></pre></td></tr></table></figure>
 
       

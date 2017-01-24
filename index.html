@@ -188,7 +188,17 @@
 <li>修改md文件后自动刷新浏览器，免去手动刷新网页的烦恼</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install --save hexo-browsersync</div></pre></td></tr></table></figure>
-<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><p>如果重新克隆了源码，记得安装一次依赖，在src目录中执行</p>
+<h5 id="自定义域名"><a href="#自定义域名" class="headerlink" title="自定义域名"></a>自定义域名</h5><p>GitHub Pages支持自定义域名，配置方式：</p>
+<ol>
+<li><p>配置GitHub</p>
+<p> 在网页端打开<a href="https://github.com/username/username.github.io，点击Settings，在下方GitHub" target="_blank" rel="external">https://github.com/username/username.github.io，点击Settings，在下方GitHub</a> Pages栏中设置Custom domain为自己的域名。</p>
+</li>
+<li><p>配置DNS</p>
+<p> 修改DNS记录，将自己域名的CNAME值设为username.github.io</p>
+</li>
+</ol>
+<p>配置好后可使用自己的域名访问GitHub Pages，更多说明见<a href="https://help.github.com/articles/quick-start-setting-up-a-custom-domain/" target="_blank" rel="external">官方文档</a>。</p>
+<h5 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h5><p>如果重新克隆了源码，记得安装一次依赖，在src目录中执行</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install</div></pre></td></tr></table></figure>
 
       
