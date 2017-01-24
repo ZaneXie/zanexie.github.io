@@ -143,7 +143,20 @@ Github Pages有缓存，稍等片刻，再访问[https://username.github.io](htt
 npm install --save hexo-browsersync
 ```
 
-#### 其他
+##### 自定义域名
+
+GitHub Pages支持自定义域名，配置方式：
+
+1. 配置GitHub
+
+    在网页端打开https://github.com/username/username.github.io，点击Settings，在下方GitHub Pages栏中设置Custom domain为自己的域名。
+    
+2. 配置DNS
+
+    修改DNS记录，将自己域名的CNAME值设为username.github.io
+
+配置好后可使用自己的域名访问GitHub Pages，更多说明见[官方文档](https://help.github.com/articles/quick-start-setting-up-a-custom-domain/)。
+##### 其他
 
 如果重新克隆了源码，记得安装一次依赖，在src目录中执行
 
