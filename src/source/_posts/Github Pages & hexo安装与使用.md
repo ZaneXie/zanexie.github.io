@@ -38,7 +38,7 @@ git push -u origin master
 ## hexo
 Github Pages测试正常之后，开始安装hexo。
 
-### 安装Node.js
+#### 安装Node.js
 hexo依赖[Node.js](https://nodejs.org/)，先到官网下载安装。windows系统在[官网](https://nodejs.org)下载安装包安装，mac和linux可以下载安装包，可以使用包管理器安装，具体的方法可以搜索一下。
 
 安装好Nodejs后，在命令行执行
@@ -48,13 +48,18 @@ npm --version
 ```
 能显示版本号表示安装成功，如果提示npm not found，则是安装失败了（或者npm不在path里），重试直到npm安装成功。
 
-### 安装hexo
+#### 安装hexo
 
 ```
 npm install hexo-cli -g
 ```
 
-### 创建一个blog
+国内的同学如果上面命令执行慢，先换国内的源，再执行
+```
+npm config set registry https://registry.npm.taobao.org
+npm install hexo-cli -g
+```
+#### 创建一个blog
 
 在刚才创建的username.github.io目录里
 ```
@@ -72,7 +77,7 @@ hexo new "hello world!
 ```
 到src/sources/_posts里找到hello world.md，写点文字。打开浏览器访问http://localhost:4000（默认端口4000，执行hexo server时会有提示）。这时就能看到刚才创建的hello world了！
 
-### 修改配置
+#### 修改配置
 
 hexo配置文件在src/_config.yml，title、subtitle、description，url等根据自己的情况修改。public_dir默认是public，修改成../，接下来生成网站！
 
@@ -91,45 +96,46 @@ git push
 
 Github Pages有缓存，稍等片刻，再访问https://username.github.io便能看到新的文章了。
 
-###一些说明
+#### 一些说明
 
-#### 分离源码与静态页面
-上面的步骤里，把文章源码(/src)和静态网页(/)放到了一起，这样可以使用一个repository同时保存源码与静态网页。也可以将文章源码新建一个repository单独保存，前面创建hexo项目的代码稍作修改
+##### 分离源码与静态页面
+上面的步骤里，把文章源码(/src)和静态网页(/)放到了一起，这样可以使用一个repository同时保存源码与静态网页。也可以将文章源码新建一个repository单独保存，前面创建hexo项目的代码稍作修改。
 
-```
-cd ..
-hexo init myblog
-cd myblog
-```
+- 创建
+    ```
+    cd ..
+    hexo init myblog
+    cd myblog
+    ```
 
-同时也不用修改public_dir的值（使用默认的public），生成完成后将文件拷贝到username.github.io里并push到github，或者安装hexo-depoloy-git
-```
-npm install hexo-deployer-git --save
-```
-修改配置_config.yml
+- 不用修改public_dir的值（使用默认的public），生成完成后将文件拷贝到username.github.io里并push到github，或者安装hexo-depoloy-git
+    ```
+    npm install hexo-deployer-git --save
+    ```
+- 修改配置_config.yml
 
-```
-deploy:
-  type: git
-  repo: <repository url>
-  branch: [branch]
-  message: [message]
-```
+    ```
+    deploy:
+      type: git
+      repo: <repository url>
+      branch: [branch]
+      message: [message]
+    ```
 
-|Option|Description|
-|--------|---------|
-|repo|GitHub/Bitbucket/Coding/GitLab repository URL|
-|branch|分支名. 如果使用GitHub或者GitCafe则不用配置，部署器会自行检测|
-|message|自定义提交信息(默认值为Site updated: {{ now('YYYY-MM-DD HH:mm:ss') }})|
+    |Option|Description|
+    |--------|---------|
+    |repo|GitHub/Bitbucket/Coding/GitLab repository URL|
+    |branch|分支名. 如果使用GitHub或者GitCafe则不用配置，部署器会自行检测|
+    |message|自定义提交信息(默认值为Site updated: 当前时间)|
 
-部署
-```
-hexo deploy
-```
+- 部署
+    ```
+    hexo deploy
+    ```
 
-#### 实用的插件
+##### 实用的插件
 
-安装插件时，注意需要在源码目录里，比如前面的username.github.io/src，安装后需要重启hexo server
+安装插件时，注意要在源码目录(/src)里，安装后重启hexo server
 
 - 修改md文件后自动刷新浏览器，免去手动刷新网页的烦恼
 
@@ -137,3 +143,10 @@ hexo deploy
 npm install --save hexo-browsersync
 ```
 
+#### 其他
+
+如果重新克隆了源码，记得安装一次依赖，在src目录中执行
+
+```
+npm install
+```

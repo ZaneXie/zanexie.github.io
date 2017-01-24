@@ -99,9 +99,9 @@
   
 
     
-    <article id="post-hexo安装与使用" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Github Pages &amp; hexo安装与使用" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/01/24/hexo安装与使用/" class="article-date">
+    <a href="/2017/01/24/Github Pages & hexo安装与使用/" class="article-date">
   <time datetime="2017-01-24T08:09:03.000Z" itemprop="datePublished">2017-01-24</time>
 </a>
     
@@ -113,7 +113,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/24/hexo安装与使用/">hexo安装与使用</a>
+      <a class="article-title" href="/2017/01/24/Github Pages & hexo安装与使用/">Github Pages &amp; hexo 的安装与使用</a>
     </h1>
   
 
@@ -121,12 +121,59 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <p>Github Pages 提供了免费的静态文件服务，用来搭建简单的个人网站很是方便。下面介绍一下如何使用Github Pages制作个人博客。</p>
+<p>由于Github Pages只能提供静态文件服务，因此不能使用类似wordpress的博客系统。一番搜索之后找到了<a href="https://github.com/hexojs/hexo" target="_blank" rel="external">hexo</a>，一个使用nodejs来生成静态文件的博客系统。</p>
+<h2 id="Github-Pages"><a href="#Github-Pages" class="headerlink" title="Github Pages"></a>Github Pages</h2><p>在github上创建一个新的repository，名字叫username.github.io，比如我的是<a href="https://github.com/zanexie/zanexie.github.io。接下来clone这个repository" target="_blank" rel="external">https://github.com/zanexie/zanexie.github.io。接下来clone这个repository</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git clone https://github.com/username/username.github.io</div></pre></td></tr></table></figure>
+<p>创建一个简单的hello world页面。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cd username.github.io</div><div class="line"></div><div class="line">echo &quot;Hello World&quot; &gt; index.html</div></pre></td></tr></table></figure></p>
+<p>将修改push到github</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">git add --all</div><div class="line"></div><div class="line">git commit -m &quot;Initial commit&quot;</div><div class="line"></div><div class="line">git push -u origin master</div></pre></td></tr></table></figure>
+<p>然后打开浏览器，浏览<a href="https://username.github.io，一切正常将能看到hello" target="_blank" rel="external">https://username.github.io，一切正常将能看到hello</a> world的页面。</p>
+<h2 id="hexo"><a href="#hexo" class="headerlink" title="hexo"></a>hexo</h2><p>Github Pages测试正常之后，开始安装hexo。</p>
+<h4 id="安装Node-js"><a href="#安装Node-js" class="headerlink" title="安装Node.js"></a>安装Node.js</h4><p>hexo依赖<a href="https://nodejs.org/" target="_blank" rel="external">Node.js</a>，先到官网下载安装。windows系统在<a href="https://nodejs.org" target="_blank" rel="external">官网</a>下载安装包安装，mac和linux可以下载安装包，可以使用包管理器安装，具体的方法可以搜索一下。</p>
+<p>安装好Nodejs后，在命令行执行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm --version</div></pre></td></tr></table></figure>
+<p>能显示版本号表示安装成功，如果提示npm not found，则是安装失败了（或者npm不在path里），重试直到npm安装成功。</p>
+<h4 id="安装hexo"><a href="#安装hexo" class="headerlink" title="安装hexo"></a>安装hexo</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install hexo-cli -g</div></pre></td></tr></table></figure>
+<p>国内的同学如果上面命令执行慢，先换国内的源，再执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">npm config set registry https://registry.npm.taobao.org</div><div class="line">npm install hexo-cli -g</div></pre></td></tr></table></figure></p>
+<h4 id="创建一个blog"><a href="#创建一个blog" class="headerlink" title="创建一个blog"></a>创建一个blog</h4><p>在刚才创建的username.github.io目录里<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">hexo init src</div><div class="line">cd src</div></pre></td></tr></table></figure></p>
+<p>开启hexo服务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexo server</div></pre></td></tr></table></figure></p>
+<p>新开一个终端，创建文章<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd path/to/username.github.io （修改为自己的路径）</div><div class="line">hexo new &quot;hello world!</div></pre></td></tr></table></figure></p>
+<p>到src/sources/_posts里找到hello world.md，写点文字。打开浏览器访问<a href="http://localhost:4000（默认端口4000，执行hexo" target="_blank" rel="external">http://localhost:4000（默认端口4000，执行hexo</a> server时会有提示）。这时就能看到刚才创建的hello world了！</p>
+<h4 id="修改配置"><a href="#修改配置" class="headerlink" title="修改配置"></a>修改配置</h4><p>hexo配置文件在src/_config.yml，title、subtitle、description，url等根据自己的情况修改。public_dir默认是public，修改成../，接下来生成网站！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexo generate</div></pre></td></tr></table></figure>
+<p>成功之后，会在username.github.io目录里生成网站的静态文件，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">cd ..</div><div class="line">git add --all</div><div class="line">git commit -m &quot;first blog&quot;</div><div class="line">git push</div></pre></td></tr></table></figure>
+<p>Github Pages有缓存，稍等片刻，再访问<a href="https://username.github.io便能看到新的文章了。" target="_blank" rel="external">https://username.github.io便能看到新的文章了。</a></p>
+<h4 id="一些说明"><a href="#一些说明" class="headerlink" title="一些说明"></a>一些说明</h4><h5 id="分离源码与静态页面"><a href="#分离源码与静态页面" class="headerlink" title="分离源码与静态页面"></a>分离源码与静态页面</h5><p>上面的步骤里，把文章源码(/src)和静态网页(/)放到了一起，这样可以使用一个repository同时保存源码与静态网页。也可以将文章源码新建一个repository单独保存，前面创建hexo项目的代码稍作修改。</p>
+<ul>
+<li><p>创建</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cd ..</div><div class="line">hexo init myblog</div><div class="line">cd myblog</div></pre></td></tr></table></figure>
+</li>
+<li><p>不用修改public_dir的值（使用默认的public），生成完成后将文件拷贝到username.github.io里并push到github，或者安装hexo-depoloy-git</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install hexo-deployer-git --save</div></pre></td></tr></table></figure>
+</li>
+<li><p>修改配置_config.yml</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">deploy:</div><div class="line">  type: git</div><div class="line">  repo: &lt;repository url&gt;</div><div class="line">  branch: [branch]</div><div class="line">  message: [message]</div></pre></td></tr></table></figure>
+<p>  |Option|Description|<br>  |——–|———|<br>  |repo|GitHub/Bitbucket/Coding/GitLab repository URL|<br>  |branch|分支名. 如果使用GitHub或者GitCafe则不用配置，部署器会自行检测|<br>  |message|自定义提交信息(默认值为Site updated: 当前时间)|</p>
+</li>
+<li><p>部署</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexo deploy</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h5 id="实用的插件"><a href="#实用的插件" class="headerlink" title="实用的插件"></a>实用的插件</h5><p>安装插件时，注意要在源码目录(/src)里，安装后重启hexo server</p>
+<ul>
+<li>修改md文件后自动刷新浏览器，免去手动刷新网页的烦恼</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install --save hexo-browsersync</div></pre></td></tr></table></figure>
+<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><p>如果重新克隆了源码，记得安装一次依赖，在src目录中执行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install</div></pre></td></tr></table></figure>
+
       
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://www.xiezj.net/2017/01/24/hexo安装与使用/" data-id="ciyb8q99z0000ignq2f8f0rid" class="article-share-link">分享到</a>
+        <a data-url="http://www.xiezj.net/2017/01/24/Github Pages & hexo安装与使用/" data-id="ciybblkl40000ycnqsrewioka" class="article-share-link">分享到</a>
       
 
       
