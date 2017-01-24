@@ -9,7 +9,7 @@ Github Pages 提供了免费的静态文件服务，用来搭建简单的个人�
 由于Github Pages只能提供静态文件服务，因此不能使用类似wordpress的博客系统。一番搜索之后找到了[hexo](https://github.com/hexojs/hexo)，一个使用nodejs来生成静态文件的博客系统。
 
 ## Github Pages
-在github上创建一个新的repository，名字叫username.github.io，比如我的是https://github.com/zanexie/zanexie.github.io。接下来clone这个repository
+在github上创建一个新的repository，名字叫username.github.io，比如我的是[https://github.com/zanexie/zanexie.github.io](https://github.com/zanexie/zanexie.github.io)。接下来clone这个repository
 
 ```
 git clone https://github.com/username/username.github.io
@@ -32,7 +32,7 @@ git commit -m "Initial commit"
 git push -u origin master
 ```
 
-然后打开浏览器，浏览https://username.github.io，一切正常将能看到hello world的页面。
+然后打开浏览器，浏览[https://username.github.io](https://username.github.io)，一切正常将能看到hello world的页面。
 
 
 ## hexo
@@ -75,7 +75,7 @@ hexo server
 cd path/to/username.github.io （修改为自己的路径）
 hexo new "hello world!
 ```
-到src/sources/_posts里找到hello world.md，写点文字。打开浏览器访问http://localhost:4000（默认端口4000，执行hexo server时会有提示）。这时就能看到刚才创建的hello world了！
+到src/sources/_posts里找到hello world.md，写点文字。打开浏览器访问[http://localhost:4000](http://localhost:4000)（默认端口4000，执行hexo server时会有提示）。这时就能看到刚才创建的hello world了！
 
 #### 修改配置
 
@@ -94,7 +94,7 @@ git commit -m "first blog"
 git push
 ```
 
-Github Pages有缓存，稍等片刻，再访问https://username.github.io便能看到新的文章了。
+Github Pages有缓存，稍等片刻，再访问[https://username.github.io](https://username.github.io)便能看到新的文章了。
 
 #### 一些说明
 
@@ -122,11 +122,11 @@ Github Pages有缓存，稍等片刻，再访问https://username.github.io便能
       message: [message]
     ```
 
-    |Option|Description|
-    |--------|---------|
-    |repo|GitHub/Bitbucket/Coding/GitLab repository URL|
-    |branch|分支名. 如果使用GitHub或者GitCafe则不用配置，部署器会自行检测|
-    |message|自定义提交信息(默认值为Site updated: 当前时间)|
+|Option|Description|
+|--------|---------|
+|repo|GitHub/Bitbucket/Coding/GitLab repository URL|
+|branch|分支名. 如果使用GitHub或者GitCafe则不用配置，部署器会自行检测|
+|message|自定义提交信息(默认值为Site updated: 当前时间)|
 
 - 部署
     ```
