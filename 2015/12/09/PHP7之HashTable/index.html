@@ -3,17 +3,23 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Zongjun Xie&#39;s Blog</title>
+  <title>PHP7之HashTable | Zongjun Xie&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Web开发">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Zongjun Xie's Blog">
-<meta property="og:url" content="http://www.xiezj.net/index.html">
+  <meta name="description" content="HashTable是PHP内核里十分重要的数据结构，承载着PHP大部分的语法特性，例如：函数表，类的属性、方法等。
+为了提高性能，PHP7重新实现了HashTable，相较之前的版本在内存和CPU的使用上均有了很大的提升。Nikic一年前（2014年12月）发布在github.io上的文章PHP’s new hashtable implementation ，详细解释了新的实现，并说明了为何比之前">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP7之HashTable">
+<meta property="og:url" content="http://www.xiezj.net/2015/12/09/PHP7之HashTable/index.html">
 <meta property="og:site_name" content="Zongjun Xie's Blog">
-<meta property="og:description" content="Web开发">
+<meta property="og:description" content="HashTable是PHP内核里十分重要的数据结构，承载着PHP大部分的语法特性，例如：函数表，类的属性、方法等。
+为了提高性能，PHP7重新实现了HashTable，相较之前的版本在内存和CPU的使用上均有了很大的提升。Nikic一年前（2014年12月）发布在github.io上的文章PHP’s new hashtable implementation ，详细解释了新的实现，并说明了为何比之前">
+<meta property="og:image" content="http://www.xiezj.net/2015/12/09/PHP7之HashTable/basic_hashtable.svg">
+<meta property="og:updated_time" content="2017-01-23T20:17:44.657Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Zongjun Xie's Blog">
-<meta name="twitter:description" content="Web开发">
+<meta name="twitter:title" content="PHP7之HashTable">
+<meta name="twitter:description" content="HashTable是PHP内核里十分重要的数据结构，承载着PHP大部分的语法特性，例如：函数表，类的属性、方法等。
+为了提高性能，PHP7重新实现了HashTable，相较之前的版本在内存和CPU的使用上均有了很大的提升。Nikic一年前（2014年12月）发布在github.io上的文章PHP’s new hashtable implementation ，详细解释了新的实现，并说明了为何比之前">
+<meta name="twitter:image" content="http://www.xiezj.net/2015/12/09/PHP7之HashTable/basic_hashtable.svg">
   
   
     <link rel="icon" href="/favicon.png">
@@ -95,113 +101,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-
-    
-    <article id="post-hexo安装与使用" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/01/24/hexo安装与使用/" class="article-date">
-  <time datetime="2017-01-24T08:09:03.000Z" itemprop="datePublished">2017-01-24</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/24/hexo安装与使用/">hexo安装与使用</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://www.xiezj.net/2017/01/24/hexo安装与使用/" data-id="ciyb8q99z0000ignq2f8f0rid" class="article-share-link">分享到</a>
-      
-
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-    
-  
-
-    
-    <article id="post-PHP7-opcode查看器" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/12/18/PHP7-opcode查看器/" class="article-date">
-  <time datetime="2015-12-18T11:12:50.000Z" itemprop="datePublished">2015-12-18</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/12/18/PHP7-opcode查看器/">PHP7 opcode查看器</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>如果要进一步理解PHP的运行原理，就涉及到了PHP的opcode：opcode是一种中间代码，和Java的ByteCode或者.NET的MSL类似。</p>
-<p>从底层来看，PHP执行的基本原理是： 读取php文件 –&gt; 编译为中间代码opcode –&gt; 执行。这个模式在PHP5与PHP7之间并没有变化，我就不在这班门弄斧了，有兴趣的同学可以看鸟哥的深入理解PHP原理之Opcodes和Sara Golemon大师的Understanding Opcodes。</p>
-<p>有了上面的基础，好奇的同学肯定对PHP代码会编译成什么样的Opcode感兴趣了，怎么能看到opcode呢？首先，可以通过调试源码的方式看到。调试的方法在PHP7源码的编译与调试有介绍，将断点打在Zend/zend.c的zend_execute_scripts里，其中的zend_compile_file(file_handle, type)是编译，zend_execute(op_array, retval)是执行（在PHP-7.0.0中为zend.c的1422行和1428行，见php-src/Zend/zend.c），zend_compile_file返回的op_array就是opcode数组了。不过这样看太痛苦了，PHP有一个很好的opcode查看器VLD，通过扩展的方式显示opcode的分析结果，参考作者的说明可以很方便的看到opcode。</p>
-<p>vld集成了很多功能，输出的内容也很多，opcode到底是怎么实现的并不容易看懂。为了更直观的理解opcode，我写了一个简单的PHP7扩展opcode查看器。</p>
-<p>这是一个简单php扩展，除去PHP扩展必须的代码,只有100多行，应该很容易理解。基本原理是这样：</p>
-<p>使用PHP_RINIT_FUNCTION，在Request init的时候将php的zend_compile_file函数替换为自己的opdump_compile_file函数。<br>opdump_compile_file函数调用php的zend_compile_file函数，翻译、存储返回结果op_array后，将op_array返回。<br>PHP7的扩展与PHP5的扩展创建与使用方法相同，可以参考鸟哥的文章用C/C++扩展你的PHP。介绍一下opdump的原理：</p>
-<p>zend_compile_file返回一个zend_op_array，定义在zend_compile.h，比较长：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> _zend_op_array &#123;</div><div class="line">    <span class="comment">/* Common elements */</span></div><div class="line">    zend_uchar type;</div><div class="line">    zend_uchar arg_flags[<span class="number">3</span>]; <span class="comment">/* bitset of arg_info.pass_by_reference */</span></div><div class="line">    <span class="keyword">uint32_t</span> fn_flags;</div><div class="line">    zend_string *function_name;</div><div class="line">    zend_class_entry *scope;</div><div class="line">    zend_function *prototype;</div><div class="line">    <span class="keyword">uint32_t</span> num_args;</div><div class="line">    <span class="keyword">uint32_t</span> required_num_args;</div><div class="line">    zend_arg_info *arg_info;</div><div class="line">    <span class="comment">/* END of common elements */</span></div><div class="line"></div><div class="line">    <span class="keyword">uint32_t</span> *refcount;</div><div class="line"></div><div class="line">    <span class="keyword">uint32_t</span> this_var;</div><div class="line"></div><div class="line">    <span class="keyword">uint32_t</span> last;</div><div class="line">    zend_op *opcodes;</div><div class="line"></div><div class="line">    <span class="keyword">int</span> last_var;</div><div class="line">    <span class="keyword">uint32_t</span> T;</div><div class="line">    zend_string **vars;</div><div class="line"></div><div class="line">    <span class="keyword">int</span> last_brk_cont;</div><div class="line">    <span class="keyword">int</span> last_try_catch;</div><div class="line">    zend_brk_cont_element *brk_cont_array;</div><div class="line">    zend_try_catch_element *try_catch_array;</div><div class="line"></div><div class="line">    <span class="comment">/* static variables support */</span></div><div class="line">    HashTable *static_variables;</div><div class="line"></div><div class="line">    zend_string *filename;</div><div class="line">    <span class="keyword">uint32_t</span> line_start;</div><div class="line">    <span class="keyword">uint32_t</span> line_end;</div><div class="line">    zend_string *doc_comment;</div><div class="line">    <span class="keyword">uint32_t</span> early_binding; <span class="comment">/* the linked list of delayed declarations */</span></div><div class="line"></div><div class="line">    <span class="keyword">int</span> last_literal;</div><div class="line">    zval *literals;</div><div class="line"></div><div class="line">    <span class="keyword">int</span>  cache_size;</div><div class="line">    <span class="keyword">void</span> **run_time_cache;</div><div class="line"></div><div class="line">    <span class="keyword">void</span> *reserved[ZEND_MAX_RESERVED_RESOURCES];</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<p>opcode存放在opcodes数组中，每行是一句code， last是code的行数。每行code是zend_op:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> _zend_op &#123;</div><div class="line">    <span class="keyword">const</span> <span class="keyword">void</span> *handler;</div><div class="line">    znode_op op1;          <span class="comment">//操作数1</span></div><div class="line">    znode_op op2;          <span class="comment">//操作数2</span></div><div class="line">    znode_op result;       <span class="comment">//返回值</span></div><div class="line">    <span class="keyword">uint32_t</span> extended_value;</div><div class="line">    <span class="keyword">uint32_t</span> lineno;       <span class="comment">//行号</span></div><div class="line">    zend_uchar opcode;     <span class="comment">//操作类型</span></div><div class="line">    zend_uchar op1_type;  <span class="comment">//操作数1类型</span></div><div class="line">    zend_uchar op2_type;  <span class="comment">//操作数2类型</span></div><div class="line">    zend_uchar result_type;  <span class="comment">//返回值类型</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<p>其中opcode是操作类型，定义在Zend/zend_vm_opcodes.h，op1_type、op2_type、result_type定义在zend_compile.h:</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">#define IS_CONST    (1&lt;&lt;0)</div><div class="line">#define IS_TMP_VAR  (1&lt;&lt;1)</div><div class="line">#define IS_VAR      (1&lt;&lt;2)</div><div class="line">#define IS_UNUSED   (1&lt;&lt;3)  /* Unused variable */</div><div class="line">#define IS_CV       (1&lt;&lt;4)  /* Compiled variable */</div><div class="line"></div><div class="line">#define EXT_TYPE_UNUSED (1&lt;&lt;5)</div></pre></td></tr></table></figure>
-<p>使用内置的zend_get_opcode_name显示opcode，再将op1，op2，result稍作处理显示出来。</p>
-<p>这样，一个简易的opdump就完成了，代码中将opcode输出到了php文件相同目录下的filename.php.opcodes文件中。测试一个简单的php文件：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$a = <span class="string">"hello world"</span>;</div><div class="line"><span class="keyword">echo</span> $a;</div></pre></td></tr></table></figure>
-<p>输出的opcode：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ZEND_ASSIGN CV+96   string:hello world  unknown</div><div class="line">ZEND_ECHO   CV+96   unused  unused</div><div class="line">ZEND_RETURN long:1  unused  unused</div></pre></td></tr></table></figure>
-<p>CV表示compiled varaible, +96表示偏移量。上面的意思是把string:hello world赋值到CV+96的位置，再对CV+96调用echo，最后返回long:1。</p>
-<p>实现：<a href="https://github.com/zanexie/php7-opdump" target="_blank" rel="external">https://github.com/zanexie/php7-opdump</a> </p>
-<p>如果要更进一步的了解opcode，可以参考vld的代码。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://www.xiezj.net/2015/12/18/PHP7-opcode查看器/" data-id="ciyaj57jt0000agnqves9a51e" class="article-share-link">分享到</a>
-      
-
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-    
-  
-
-    
-    <article id="post-PHP7之HashTable" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-PHP7之HashTable" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/12/09/PHP7之HashTable/" class="article-date">
   <time datetime="2015-12-09T12:04:16.000Z" itemprop="datePublished">2015-12-09</time>
@@ -214,8 +114,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/12/09/PHP7之HashTable/">PHP7之HashTable</a>
+    <h1 class="article-title" itemprop="name">
+      PHP7之HashTable
     </h1>
   
 
@@ -286,87 +186,29 @@
     </footer>
   </div>
   
-</article>
-
-
     
+<nav id="article-nav">
   
-
-    
-    <article id="post-PHP7源码的编译与调试" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/12/09/PHP7源码的编译与调试/" class="article-date">
-  <time datetime="2015-12-09T11:56:20.000Z" itemprop="datePublished">2015-12-09</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
+    <a href="/2015/12/18/PHP7-opcode查看器/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
         
+          PHP7 opcode查看器
+        
+      </div>
+    </a>
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/12/09/PHP7源码的编译与调试/">PHP7源码的编译与调试</a>
-    </h1>
   
+    <a href="/2015/12/09/PHP7源码的编译与调试/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">PHP7源码的编译与调试</div>
+    </a>
+  
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>PHP7源码的编译和调试很方便，此处简要介绍一下在Ubuntu下的调试方法（使用其他系统的话可以用虚拟机启一台Ubuntu）</p>
-<ol>
-<li>带界面的Ubuntu。首选官方Ubuntu Desktop，推荐LTS版本。如果用虚拟机性能不足的话，可以使用XUbuntu 。</li>
-<li>集成gdb界面的IDE。直接命令行gdb调试太辛苦，效率也不高，建议使用IDE调试。这里推荐使用eclipse cdt和QtCreator。</li>
-<li><p>PHP7代码。从官网<a href="http://php.net/" target="_blank" rel="external">http://php.net/</a>下载打包好的源码，解压后进入目录，运行</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./configure --enable-debug --prefix=/home/php/usr</div></pre></td></tr></table></figure>
-<p> –enable-debug表示开启调试，编译时才会带上调试符号，要调试的话一定要带上。prefix指安装的目录，为了避免不小心装到系统目录里，建议自行选择一个目录。然后就是 </p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">make</div></pre></td></tr></table></figure>
-<p> 了。编译好后的可执行文件在sapi下，分为不同的版本cli、fpm、cgi等。调试简单脚本时，最方便的是sapi/cli/php，即命令行的php。</p>
-</li>
-<li><p>配置IDE </p>
-<ul>
-<li>eclipse</li>
-</ul>
-<ol>
-<li>记得选择for C/C++ developer的eclipse（集成CDT才能调试）。任选一个workspace之后，点击上方的File–Import，如下图选择Existing code as Autotools project（选as Makefile project也行）<img src="/2015/12/09/PHP7源码的编译与调试/JBSER5YCL8QZVVGAU6.png" alt="basic_hashtable" title="basic_hashtable">
-<ol>
-<li>然后选择php源码的目录，一直下一步到完成，eclipse会自动索引整个代码，然后就能方便的看代码了。一般到这一步，eclipse会提示有些文件的代码有错，不用管它，因为有些定义没找到，只要上一步编译正常就ok，不影响调试。</li>
-<li>配制debug。在上方选择Run/Debug Configurations… 新建一个C/C++ Application的调试配置。选择刚才编译好的php可执行文件，并在Arguments里配上待调试的php文件位置 
-<img src="/2015/12/09/PHP7源码的编译与调试/ISQ489O32RBF_Y633VU.png" alt="basic_hashtable" title="basic_hashtable"></li>
-<li>再点击右下角的Debug，大功告成！默认情况下eclipse会停在main函数的入口处，然后就可以愉快的打断点调试了。在这个地方eclipse可能会提示代码有错误，是否继续调试？不用管它，强制开始就好。</li>
-</ol>
-</li>
-</ol>
-<ul>
-<li>Qt Creator<ol>
-<li>使用方法和eclipse类似，安装之后选File/New File or Project/Import Project/Import Existing Project，依次选目录，加进去即可。 <img src="/2015/12/09/PHP7源码的编译与调试/qt.png" alt="basic_hashtable" title="basic_hashtable"></li>
-<li>待索引好后，依次点击上方的Debug/Start Debugging/Start Debugging Without Deployment， 然后和依次填写要调试的可执行文件和arguments（和eclipse差不多），然后就大功告成了！如果Qt Creator没有默认停住，在代码里打个断点重新开始就行了。</li>
-</ol>
-</li>
-</ul>
-</li>
-</ol>
-<p>个人觉得eclipse使用更方便，但是在使用调试的时候，有些变量打不出，而使用Qt Creator就正常。貌似是eclipse的一个bug，结合两个IDE使用就ok了。 其他的调试工具配置方法都类似：先自己编译源码（记得加–enable-debug），编译好为调试工具设置可执行文件、代码目录、arguments即可。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://www.xiezj.net/2015/12/09/PHP7源码的编译与调试/" data-id="ciyaiqqka000170nq53x9t3tt" class="article-share-link">分享到</a>
-      
-
-      
-    </footer>
-  </div>
   
 </article>
 
-
-    
-  
-  
 </section>
         
       </div>

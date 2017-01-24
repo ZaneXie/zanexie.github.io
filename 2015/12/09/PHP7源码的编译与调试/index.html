@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>PHP7源码的编译与调试 | Zongjun Xie&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="PHP7源码的编译和调试很方便，此处简要介绍一下在Ubuntu下的调试方法（使用其他系统的话可以用虚拟机启一台Ubuntu）
+
+带界面的Ubuntu。首选官方Ubuntu Desktop，推荐LTS版本。如果用虚拟机性能不足的话，可以使用XUbuntu 。
+集成gdb界面的IDE。直接命令行gdb调试太辛苦，效率也不高，建议使用IDE调试。这里推荐使用eclipse cdt和QtCreator。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP7源码的编译与调试">
+<meta property="og:url" content="http://www.xiezj.net/2015/12/09/PHP7源码的编译与调试/index.html">
+<meta property="og:site_name" content="Zongjun Xie's Blog">
+<meta property="og:description" content="PHP7源码的编译和调试很方便，此处简要介绍一下在Ubuntu下的调试方法（使用其他系统的话可以用虚拟机启一台Ubuntu）
+
+带界面的Ubuntu。首选官方Ubuntu Desktop，推荐LTS版本。如果用虚拟机性能不足的话，可以使用XUbuntu 。
+集成gdb界面的IDE。直接命令行gdb调试太辛苦，效率也不高，建议使用IDE调试。这里推荐使用eclipse cdt和QtCreator。">
+<meta property="og:image" content="http://www.xiezj.net/2015/12/09/PHP7源码的编译与调试/JBSER5YCL8QZVVGAU6.png">
+<meta property="og:image" content="http://www.xiezj.net/2015/12/09/PHP7源码的编译与调试/ISQ489O32RBF_Y633VU.png">
+<meta property="og:image" content="http://www.xiezj.net/2015/12/09/PHP7源码的编译与调试/qt.png">
+<meta property="og:updated_time" content="2017-01-23T20:17:44.673Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHP7源码的编译与调试">
+<meta name="twitter:description" content="PHP7源码的编译和调试很方便，此处简要介绍一下在Ubuntu下的调试方法（使用其他系统的话可以用虚拟机启一台Ubuntu）
+
+带界面的Ubuntu。首选官方Ubuntu Desktop，推荐LTS版本。如果用虚拟机性能不足的话，可以使用XUbuntu 。
+集成gdb界面的IDE。直接命令行gdb调试太辛苦，效率也不高，建议使用IDE调试。这里推荐使用eclipse cdt和QtCreator。">
+<meta name="twitter:image" content="http://www.xiezj.net/2015/12/09/PHP7源码的编译与调试/JBSER5YCL8QZVVGAU6.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/scrollUp/image.css">
+  <!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+  
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <div class="logo">
+        <img src="/logo.png" alt="Profile Picture">
+      </div>
+      <div id="title">Zongjun Xie's Blog</div>
+      
+        <div id="subtitle">谢宗钧的Blog</div>
+      
+       <ul class="my-socials">
+  
+ 
+</ul>
+    </div>
+  </div>
+  <div id="header-inner" class="">
+    <nav id="main-nav">
+      <a id="main-nav-toggle" class="nav-icon"></a>
+      <!--
+        
+          
+            <a class="main-nav-link" href="/">首页</a>
+          
+            <a class="main-nav-link" href="/archives">归档</a>
+          
+        
+      -->
+    </nav>
+    <nav id="title-nav" style="display:none">
+      <a href="/">Zongjun Xie&#39;s Blog</a>
+      <img src="/logo.png" alt="Profile Picture">
+      <!--
+      <span id="title-nav-socials">
+        
+       
+     </span>
+      -->
+    </nav>
+    <nav id="sub-nav">
+      
+      <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+    </nav>
+    <div id="search-form-wrap">
+      <form action="http://www.baidu.com/baidu" method="get" accept-charset="utf-8" class="search-form">
+        <input type="search" name="word" maxlength="20" class="search-form-input" placeholder="搜索">
+        <input type="submit" value="" class="search-form-submit">
+        <input name=tn type=hidden value="bds">
+        <input name=cl type=hidden value="3">
+        <input name=ct type=hidden value="2097152">
+        <input type="hidden" name="si" value="www.xiezj.net">
+      </form>
+    </div>
+  </div>
+  <div class="site-nav" style="display: none;">
+    <ul>
+      
+      
+        <li><a href="/">首页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+      
+    </ul>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-PHP7源码的编译与调试" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/12/09/PHP7源码的编译与调试/" class="article-date">
+  <time datetime="2015-12-09T11:56:20.000Z" itemprop="datePublished">2015-12-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      PHP7源码的编译与调试
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>PHP7源码的编译和调试很方便，此处简要介绍一下在Ubuntu下的调试方法（使用其他系统的话可以用虚拟机启一台Ubuntu）</p>
+<ol>
+<li>带界面的Ubuntu。首选官方Ubuntu Desktop，推荐LTS版本。如果用虚拟机性能不足的话，可以使用XUbuntu 。</li>
+<li>集成gdb界面的IDE。直接命令行gdb调试太辛苦，效率也不高，建议使用IDE调试。这里推荐使用eclipse cdt和QtCreator。</li>
+<li><p>PHP7代码。从官网<a href="http://php.net/" target="_blank" rel="external">http://php.net/</a>下载打包好的源码，解压后进入目录，运行</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./configure --enable-debug --prefix=/home/php/usr</div></pre></td></tr></table></figure>
+<p> –enable-debug表示开启调试，编译时才会带上调试符号，要调试的话一定要带上。prefix指安装的目录，为了避免不小心装到系统目录里，建议自行选择一个目录。然后就是 </p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">make</div></pre></td></tr></table></figure>
+<p> 了。编译好后的可执行文件在sapi下，分为不同的版本cli、fpm、cgi等。调试简单脚本时，最方便的是sapi/cli/php，即命令行的php。</p>
+</li>
+<li><p>配置IDE </p>
+<ul>
+<li>eclipse</li>
+</ul>
+<ol>
+<li>记得选择for C/C++ developer的eclipse（集成CDT才能调试）。任选一个workspace之后，点击上方的File–Import，如下图选择Existing code as Autotools project（选as Makefile project也行）<img src="/2015/12/09/PHP7源码的编译与调试/JBSER5YCL8QZVVGAU6.png" alt="basic_hashtable" title="basic_hashtable">
+<ol>
+<li>然后选择php源码的目录，一直下一步到完成，eclipse会自动索引整个代码，然后就能方便的看代码了。一般到这一步，eclipse会提示有些文件的代码有错，不用管它，因为有些定义没找到，只要上一步编译正常就ok，不影响调试。</li>
+<li>配制debug。在上方选择Run/Debug Configurations… 新建一个C/C++ Application的调试配置。选择刚才编译好的php可执行文件，并在Arguments里配上待调试的php文件位置 
+<img src="/2015/12/09/PHP7源码的编译与调试/ISQ489O32RBF_Y633VU.png" alt="basic_hashtable" title="basic_hashtable"></li>
+<li>再点击右下角的Debug，大功告成！默认情况下eclipse会停在main函数的入口处，然后就可以愉快的打断点调试了。在这个地方eclipse可能会提示代码有错误，是否继续调试？不用管它，强制开始就好。</li>
+</ol>
+</li>
+</ol>
+<ul>
+<li>Qt Creator<ol>
+<li>使用方法和eclipse类似，安装之后选File/New File or Project/Import Project/Import Existing Project，依次选目录，加进去即可。 <img src="/2015/12/09/PHP7源码的编译与调试/qt.png" alt="basic_hashtable" title="basic_hashtable"></li>
+<li>待索引好后，依次点击上方的Debug/Start Debugging/Start Debugging Without Deployment， 然后和依次填写要调试的可执行文件和arguments（和eclipse差不多），然后就大功告成了！如果Qt Creator没有默认停住，在代码里打个断点重新开始就行了。</li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+<p>个人觉得eclipse使用更方便，但是在使用调试的时候，有些变量打不出，而使用Qt Creator就正常。貌似是eclipse的一个bug，结合两个IDE使用就ok了。 其他的调试工具配置方法都类似：先自己编译源码（记得加–enable-debug），编译好为调试工具设置可执行文件、代码目录、arguments即可。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://www.xiezj.net/2015/12/09/PHP7源码的编译与调试/" data-id="ciyaiqqka000170nq53x9t3tt" class="article-share-link">分享到</a>
+      
+
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/12/09/PHP7之HashTable/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          PHP7之HashTable
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Zongjun Xie<br>
+      Theme <a href="https://github.com/henryhuang/oishi" target="_blank">Oishi</a>, Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <!--
+      <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    -->
+    
+
+<!-- 百度分享 start -->
+
+<!-- 百度分享 end -->
+
+<script src="//cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+
+
+
+<script src="/js/jquery.scrollUp.min.js"></script>
+<script src="/js/jquery.transform.js"></script>
+<script src="/js/menu.js"></script>
+
+<script src="/js/script.js"></script>
+<script src="/js/scrollUp.js"></script>
+
+  </div>
+</body>
+</html>

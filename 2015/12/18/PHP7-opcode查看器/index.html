@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>PHP7 opcode查看器 | Zongjun Xie&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="如果要进一步理解PHP的运行原理，就涉及到了PHP的opcode：opcode是一种中间代码，和Java的ByteCode或者.NET的MSL类似。
+从底层来看，PHP执行的基本原理是： 读取php文件 –&amp;gt; 编译为中间代码opcode –&amp;gt; 执行。这个模式在PHP5与PHP7之间并没有变化，我就不在这班门弄斧了，有兴趣的同学可以看鸟哥的深入理解PHP原理之Opcodes和Sara G">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP7 opcode查看器">
+<meta property="og:url" content="http://www.xiezj.net/2015/12/18/PHP7-opcode查看器/index.html">
+<meta property="og:site_name" content="Zongjun Xie's Blog">
+<meta property="og:description" content="如果要进一步理解PHP的运行原理，就涉及到了PHP的opcode：opcode是一种中间代码，和Java的ByteCode或者.NET的MSL类似。
+从底层来看，PHP执行的基本原理是： 读取php文件 –&amp;gt; 编译为中间代码opcode –&amp;gt; 执行。这个模式在PHP5与PHP7之间并没有变化，我就不在这班门弄斧了，有兴趣的同学可以看鸟哥的深入理解PHP原理之Opcodes和Sara G">
+<meta property="og:updated_time" content="2017-01-24T08:24:48.613Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHP7 opcode查看器">
+<meta name="twitter:description" content="如果要进一步理解PHP的运行原理，就涉及到了PHP的opcode：opcode是一种中间代码，和Java的ByteCode或者.NET的MSL类似。
+从底层来看，PHP执行的基本原理是： 读取php文件 –&amp;gt; 编译为中间代码opcode –&amp;gt; 执行。这个模式在PHP5与PHP7之间并没有变化，我就不在这班门弄斧了，有兴趣的同学可以看鸟哥的深入理解PHP原理之Opcodes和Sara G">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/scrollUp/image.css">
+  <!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+  
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <div class="logo">
+        <img src="/logo.png" alt="Profile Picture">
+      </div>
+      <div id="title">Zongjun Xie's Blog</div>
+      
+        <div id="subtitle">谢宗钧的Blog</div>
+      
+       <ul class="my-socials">
+  
+ 
+</ul>
+    </div>
+  </div>
+  <div id="header-inner" class="">
+    <nav id="main-nav">
+      <a id="main-nav-toggle" class="nav-icon"></a>
+      <!--
+        
+          
+            <a class="main-nav-link" href="/">首页</a>
+          
+            <a class="main-nav-link" href="/archives">归档</a>
+          
+        
+      -->
+    </nav>
+    <nav id="title-nav" style="display:none">
+      <a href="/">Zongjun Xie&#39;s Blog</a>
+      <img src="/logo.png" alt="Profile Picture">
+      <!--
+      <span id="title-nav-socials">
+        
+       
+     </span>
+      -->
+    </nav>
+    <nav id="sub-nav">
+      
+      <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+    </nav>
+    <div id="search-form-wrap">
+      <form action="http://www.baidu.com/baidu" method="get" accept-charset="utf-8" class="search-form">
+        <input type="search" name="word" maxlength="20" class="search-form-input" placeholder="搜索">
+        <input type="submit" value="" class="search-form-submit">
+        <input name=tn type=hidden value="bds">
+        <input name=cl type=hidden value="3">
+        <input name=ct type=hidden value="2097152">
+        <input type="hidden" name="si" value="www.xiezj.net">
+      </form>
+    </div>
+  </div>
+  <div class="site-nav" style="display: none;">
+    <ul>
+      
+      
+        <li><a href="/">首页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+      
+    </ul>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-PHP7-opcode查看器" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/12/18/PHP7-opcode查看器/" class="article-date">
+  <time datetime="2015-12-18T11:12:50.000Z" itemprop="datePublished">2015-12-18</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      PHP7 opcode查看器
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>如果要进一步理解PHP的运行原理，就涉及到了PHP的opcode：opcode是一种中间代码，和Java的ByteCode或者.NET的MSL类似。</p>
+<p>从底层来看，PHP执行的基本原理是： 读取php文件 –&gt; 编译为中间代码opcode –&gt; 执行。这个模式在PHP5与PHP7之间并没有变化，我就不在这班门弄斧了，有兴趣的同学可以看鸟哥的深入理解PHP原理之Opcodes和Sara Golemon大师的Understanding Opcodes。</p>
+<p>有了上面的基础，好奇的同学肯定对PHP代码会编译成什么样的Opcode感兴趣了，怎么能看到opcode呢？首先，可以通过调试源码的方式看到。调试的方法在PHP7源码的编译与调试有介绍，将断点打在Zend/zend.c的zend_execute_scripts里，其中的zend_compile_file(file_handle, type)是编译，zend_execute(op_array, retval)是执行（在PHP-7.0.0中为zend.c的1422行和1428行，见php-src/Zend/zend.c），zend_compile_file返回的op_array就是opcode数组了。不过这样看太痛苦了，PHP有一个很好的opcode查看器VLD，通过扩展的方式显示opcode的分析结果，参考作者的说明可以很方便的看到opcode。</p>
+<p>vld集成了很多功能，输出的内容也很多，opcode到底是怎么实现的并不容易看懂。为了更直观的理解opcode，我写了一个简单的PHP7扩展opcode查看器。</p>
+<p>这是一个简单php扩展，除去PHP扩展必须的代码,只有100多行，应该很容易理解。基本原理是这样：</p>
+<p>使用PHP_RINIT_FUNCTION，在Request init的时候将php的zend_compile_file函数替换为自己的opdump_compile_file函数。<br>opdump_compile_file函数调用php的zend_compile_file函数，翻译、存储返回结果op_array后，将op_array返回。<br>PHP7的扩展与PHP5的扩展创建与使用方法相同，可以参考鸟哥的文章用C/C++扩展你的PHP。介绍一下opdump的原理：</p>
+<p>zend_compile_file返回一个zend_op_array，定义在zend_compile.h，比较长：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> _zend_op_array &#123;</div><div class="line">    <span class="comment">/* Common elements */</span></div><div class="line">    zend_uchar type;</div><div class="line">    zend_uchar arg_flags[<span class="number">3</span>]; <span class="comment">/* bitset of arg_info.pass_by_reference */</span></div><div class="line">    <span class="keyword">uint32_t</span> fn_flags;</div><div class="line">    zend_string *function_name;</div><div class="line">    zend_class_entry *scope;</div><div class="line">    zend_function *prototype;</div><div class="line">    <span class="keyword">uint32_t</span> num_args;</div><div class="line">    <span class="keyword">uint32_t</span> required_num_args;</div><div class="line">    zend_arg_info *arg_info;</div><div class="line">    <span class="comment">/* END of common elements */</span></div><div class="line"></div><div class="line">    <span class="keyword">uint32_t</span> *refcount;</div><div class="line"></div><div class="line">    <span class="keyword">uint32_t</span> this_var;</div><div class="line"></div><div class="line">    <span class="keyword">uint32_t</span> last;</div><div class="line">    zend_op *opcodes;</div><div class="line"></div><div class="line">    <span class="keyword">int</span> last_var;</div><div class="line">    <span class="keyword">uint32_t</span> T;</div><div class="line">    zend_string **vars;</div><div class="line"></div><div class="line">    <span class="keyword">int</span> last_brk_cont;</div><div class="line">    <span class="keyword">int</span> last_try_catch;</div><div class="line">    zend_brk_cont_element *brk_cont_array;</div><div class="line">    zend_try_catch_element *try_catch_array;</div><div class="line"></div><div class="line">    <span class="comment">/* static variables support */</span></div><div class="line">    HashTable *static_variables;</div><div class="line"></div><div class="line">    zend_string *filename;</div><div class="line">    <span class="keyword">uint32_t</span> line_start;</div><div class="line">    <span class="keyword">uint32_t</span> line_end;</div><div class="line">    zend_string *doc_comment;</div><div class="line">    <span class="keyword">uint32_t</span> early_binding; <span class="comment">/* the linked list of delayed declarations */</span></div><div class="line"></div><div class="line">    <span class="keyword">int</span> last_literal;</div><div class="line">    zval *literals;</div><div class="line"></div><div class="line">    <span class="keyword">int</span>  cache_size;</div><div class="line">    <span class="keyword">void</span> **run_time_cache;</div><div class="line"></div><div class="line">    <span class="keyword">void</span> *reserved[ZEND_MAX_RESERVED_RESOURCES];</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>opcode存放在opcodes数组中，每行是一句code， last是code的行数。每行code是zend_op:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> _zend_op &#123;</div><div class="line">    <span class="keyword">const</span> <span class="keyword">void</span> *handler;</div><div class="line">    znode_op op1;          <span class="comment">//操作数1</span></div><div class="line">    znode_op op2;          <span class="comment">//操作数2</span></div><div class="line">    znode_op result;       <span class="comment">//返回值</span></div><div class="line">    <span class="keyword">uint32_t</span> extended_value;</div><div class="line">    <span class="keyword">uint32_t</span> lineno;       <span class="comment">//行号</span></div><div class="line">    zend_uchar opcode;     <span class="comment">//操作类型</span></div><div class="line">    zend_uchar op1_type;  <span class="comment">//操作数1类型</span></div><div class="line">    zend_uchar op2_type;  <span class="comment">//操作数2类型</span></div><div class="line">    zend_uchar result_type;  <span class="comment">//返回值类型</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>其中opcode是操作类型，定义在Zend/zend_vm_opcodes.h，op1_type、op2_type、result_type定义在zend_compile.h:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">#define IS_CONST    (1&lt;&lt;0)</div><div class="line">#define IS_TMP_VAR  (1&lt;&lt;1)</div><div class="line">#define IS_VAR      (1&lt;&lt;2)</div><div class="line">#define IS_UNUSED   (1&lt;&lt;3)  /* Unused variable */</div><div class="line">#define IS_CV       (1&lt;&lt;4)  /* Compiled variable */</div><div class="line"></div><div class="line">#define EXT_TYPE_UNUSED (1&lt;&lt;5)</div></pre></td></tr></table></figure>
+<p>使用内置的zend_get_opcode_name显示opcode，再将op1，op2，result稍作处理显示出来。</p>
+<p>这样，一个简易的opdump就完成了，代码中将opcode输出到了php文件相同目录下的filename.php.opcodes文件中。测试一个简单的php文件：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$a = <span class="string">"hello world"</span>;</div><div class="line"><span class="keyword">echo</span> $a;</div></pre></td></tr></table></figure>
+<p>输出的opcode：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ZEND_ASSIGN CV+96   string:hello world  unknown</div><div class="line">ZEND_ECHO   CV+96   unused  unused</div><div class="line">ZEND_RETURN long:1  unused  unused</div></pre></td></tr></table></figure>
+<p>CV表示compiled varaible, +96表示偏移量。上面的意思是把string:hello world赋值到CV+96的位置，再对CV+96调用echo，最后返回long:1。</p>
+<p>实现：<a href="https://github.com/zanexie/php7-opdump" target="_blank" rel="external">https://github.com/zanexie/php7-opdump</a> </p>
+<p>如果要更进一步的了解opcode，可以参考vld的代码。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://www.xiezj.net/2015/12/18/PHP7-opcode查看器/" data-id="ciyaj57jt0000agnqves9a51e" class="article-share-link">分享到</a>
+      
+
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/01/24/hexo安装与使用/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          hexo安装与使用
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/12/09/PHP7之HashTable/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">PHP7之HashTable</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Zongjun Xie<br>
+      Theme <a href="https://github.com/henryhuang/oishi" target="_blank">Oishi</a>, Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <!--
+      <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    -->
+    
+
+<!-- 百度分享 start -->
+
+<!-- 百度分享 end -->
+
+<script src="//cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+
+
+
+<script src="/js/jquery.scrollUp.min.js"></script>
+<script src="/js/jquery.transform.js"></script>
+<script src="/js/menu.js"></script>
+
+<script src="/js/script.js"></script>
+<script src="/js/scrollUp.js"></script>
+
+  </div>
+</body>
+</html>
